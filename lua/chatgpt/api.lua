@@ -40,7 +40,7 @@ local function curl_post(url, params, cb)
             },
         },
     }
-    vim.pretty_print(parms)
+    vim.pretty_print(params)
     local jsonified = vim.fn.json_encode(gpt_payload)
 
     local res = curl.post(url, {
@@ -65,7 +65,7 @@ function Api.make_call(url, params, cb)
     -- f:write(vim.fn.json_encode(params))
     -- f:close()
 
-    local response = curl_post(url, params)
+    -- local response = curl_post(url, params)
     print("response", response)
     -- Api.handle_response(response, 0, cb)
     -- Api.job = job:new({
