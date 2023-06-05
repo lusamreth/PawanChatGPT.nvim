@@ -51,7 +51,7 @@ local function curl_post(url, params, cb)
         },
     })
     vim.pretty_print(res)
-    cb("hellloo")
+    -- cb("hellloo")
     return res.body
 end
 
@@ -65,7 +65,7 @@ function Api.make_call(url, params, cb)
     -- f:write(vim.fn.json_encode(params))
     -- f:close()
 
-    -- local response = curl_post(url, params)
+    local response = curl_post(url, params)
     print("response", response)
     vim.pretty_print(params)
     -- Api.handle_response(response, 0, cb)
