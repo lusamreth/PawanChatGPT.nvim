@@ -46,7 +46,11 @@ local function curl_post(url, params, cb)
     }
     -- vim.pretty_print(params)
 
-    local jsonified = vim.fn.json_encode(params)
+    local jsonified = vim.fn.json_encode({
+        model = "gpt-3.5-turbo",
+        max_tokens = 3000,
+        messages = params.messages,
+    })
 
     local res = curl.post(url, {
         body = jsonified,
@@ -72,30 +76,33 @@ function Api.make_call(url, params, cb)
     end
 
     vim.pretty_print(vim.fn.json_encode(params))
-    f:write(vim.fn.json_encode(params))
+
+    local jsonified = vim.fn.json_encode({
+        model = "gpt-3.5-turbo",
+        max_tokens = 3000,
+        messages = params.messages,
+    })
+    f:write(jsonified)
     f:close()
 
-    local response = curl_post(url, params)
-    -- print("response", response)
-    vim.pretty_print(response)
     -- Api.handle_response(response, 0, cb)
-    -- Api.job = job:new({
-    --     command = "curl",
-    --     args = {
-    --         url,
-    --         "-H",
-    --         "Content-Type: application/json",
-    --         "-H",
-    --         "Authorization: Bearer " .. Api.OPENAI_API_KEY,
-    --         "-d",
-    --         "@" .. TMP_MSG_FILENAME,
-    --     },
-    --     on_exit = vim.schedule_wrap(function(response, exit_code)
-    --         print("RESPONSEE", response, exit_code)
-    --         vim.pretty_print(response)
-    --         Api.handle_response(response, exit_code, cb)
-    --     end),
-    -- }):start()
+    Api.job = job:new({
+        command = "curl",
+        args = {
+            url,
+            "-H",
+            "Content-Type: application/json",
+            "-H",
+            "Authorization: Bearer " .. Api.OPENAI_API_KEY,
+            "-d",
+            "@" .. TMP_MSG_FILENAME,
+        },
+        on_exit = vim.schedule_wrap(function(response, exit_code)
+            print("RESPONSEE", response, exit_code)
+            vim.pretty_print(response)
+            Api.handle_response(response, exit_code, cb)
+        end),
+    }):start()
 end
 
 Api.handle_response = vim.schedule_wrap(function(response, exit_code, cb)
