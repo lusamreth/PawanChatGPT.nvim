@@ -2,6 +2,7 @@ local job = require("plenary.job")
 local Config = require("chatgpt.config")
 local logger = require("chatgpt.common.logger")
 
+local curl = require("plenary.curl")
 local Api = {}
 
 -- API URL
