@@ -25,7 +25,7 @@ function Api.edits(custom_params, cb)
     Api.make_call(Api.EDITS_URL, params, cb)
 end
 
-local function curl_post(url, params)
+local function curl_post(url, params, cb)
     local gpt_payload = {
         model = "gpt-3.5-turbo",
         max_tokens = 3000,
@@ -50,6 +50,7 @@ local function curl_post(url, params)
         },
     })
     vim.pretty_print(res)
+    cb("hellloo")
     return res.body
 end
 
@@ -65,7 +66,7 @@ function Api.make_call(url, params, cb)
 
     local response = curl_post(url, params)
     print("response", response)
-    Api.handle_response(response, 0, cb)
+    -- Api.handle_response(response, 0, cb)
     -- Api.job = job:new({
     --     command = "curl",
     --     args = {
