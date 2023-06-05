@@ -624,10 +624,27 @@ function Chat:open()
             if self.role == ROLE_USER then
                 self:showProgess()
                 local params = vim.tbl_extend("keep", { messages = self:toMessages() }, Settings.params)
-                Api.chat_completions(params, function(answer, usage)
-                    print("completion awnserc", answer)
-                    self:addAnswer(answer, usage)
-                end)
+
+                local gpt_payload = {
+                    model = "gpt-3.5-turbo",
+                    max_tokens = 3000,
+                    messages = {
+                        {
+                            role = "system",
+                            content = "a very helpful assistant",
+                        },
+                        {
+                            role = "user",
+                            content = "hello",
+                        },
+                    },
+                }
+                local jsonified = vim.fn.json_encode(gpt_payload)
+                Api.make_call(Api.CHAT_COMPLETIONS_URL, jsonified)
+                -- Api.chat_completions(params, function(answer, usage)
+                --     print("completion awnserc", answer)
+                --     self:addAnswer(answer, usage)
+                -- end)
             end
         end),
     })
