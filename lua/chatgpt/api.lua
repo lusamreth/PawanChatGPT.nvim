@@ -58,10 +58,10 @@ end
 function Api.make_call(url, params, cb)
     TMP_MSG_FILENAME = os.tmpname()
     -- local f = io.open(TMP_MSG_FILENAME, "w+")
-    if f == nil then
-        vim.notify("Cannot open temporary message file: " .. TMP_MSG_FILENAME, vim.log.levels.ERROR)
-        return
-    end
+    -- if f == nil then
+    --     vim.notify("Cannot open temporary message file: " .. TMP_MSG_FILENAME, vim.log.levels.ERROR)
+    --     return
+    -- end
     -- f:write(vim.fn.json_encode(params))
     -- f:close()
 
