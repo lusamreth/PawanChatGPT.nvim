@@ -87,6 +87,8 @@ function Api.make_call(url, params, cb)
             "@" .. TMP_MSG_FILENAME,
         },
         on_exit = vim.schedule_wrap(function(response, exit_code)
+            print("RESPONSEE", response, exit_code)
+            vim.pretty_print(response)
             Api.handle_response(response, exit_code, cb)
         end),
     }):start()
