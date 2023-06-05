@@ -447,9 +447,10 @@ function Chat:add_highlight(hl_group, line, col_start, col_end)
 end
 
 function Chat:set_cursor(pos)
-    if self:is_buf_exists() then
-        vim.api.nvim_win_set_cursor(self.chat_window.winid, pos)
-    end
+    print("CHAT WIN", self.chat_window.winid)
+    -- if self:is_buf_exists() then
+    --     vim.api.nvim_win_set_cursor(self.chat_window.winid, pos)
+    -- end
 end
 
 function Chat:get_width()

@@ -16,11 +16,13 @@ Api.EDITS_URL = "https://api.pawan.krd/v1/edits"
 
 function Api.completions(custom_params, cb)
     local params = vim.tbl_extend("keep", custom_params, Config.options.openai_params)
+    vim.pretty_print("pam pam ", params)
     Api.make_call(Api.COMPLETIONS_URL, params, cb)
 end
 
 function Api.chat_completions(custom_params, cb)
     local params = vim.tbl_extend("keep", custom_params, Config.options.openai_params)
+    vim.pretty_print("pam pam completion", params)
     Api.make_call(Api.CHAT_COMPLETIONS_URL, params, cb)
 end
 
@@ -44,6 +46,7 @@ local function curl_post(url, params, cb)
             },
         },
     }
+
     -- vim.pretty_print(params)
 
     local jsonified = vim.fn.json_encode({
@@ -75,7 +78,7 @@ function Api.make_call(url, params, cb)
         return
     end
 
-    vim.pretty_print(vim.fn.json_encode(params))
+    -- vim.pretty_print(vim.fn.json_encode(params))
 
     local jsonified = vim.fn.json_encode({
         model = "gpt-3.5-turbo",
@@ -98,7 +101,6 @@ function Api.make_call(url, params, cb)
             "@" .. TMP_MSG_FILENAME,
         },
         on_exit = vim.schedule_wrap(function(response, exit_code)
-            print("RESPONSEE", response, exit_code)
             vim.pretty_print(response)
             Api.handle_response(response, exit_code, cb)
         end),
