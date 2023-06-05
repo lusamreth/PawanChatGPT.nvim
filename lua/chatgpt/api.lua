@@ -92,6 +92,7 @@ function Api.make_call(url, params, cb)
     Api.job = job:new({
         command = "curl",
         args = {
+            "-v",
             url,
             "-H",
             "Content-Type: application/json",
