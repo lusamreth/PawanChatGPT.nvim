@@ -54,6 +54,9 @@ local function curl_post(url, params, cb)
             content_type = "application/json",
             authorization = "Bearer " .. Api.OPENAI_API_KEY,
         },
+        callback = function(out)
+            Api.handle_response(out, 0, cb)
+        end,
     })
     vim.pretty_print(res)
     -- cb("hellloo")
@@ -67,31 +70,32 @@ function Api.make_call(url, params, cb)
         vim.notify("Cannot open temporary message file: " .. TMP_MSG_FILENAME, vim.log.levels.ERROR)
         return
     end
-    f:write(vim.fn.json_encode(params))
+
     vim.pretty_print(vim.fn.json_encode(params))
+    f:write(vim.fn.json_encode(params))
     f:close()
 
-    -- local response = curl_post(url, params)
+    local response = curl_post(url, params)
     -- print("response", response)
-    -- vim.pretty_print(params)
+    vim.pretty_print(response)
     -- Api.handle_response(response, 0, cb)
-    Api.job = job:new({
-        command = "curl",
-        args = {
-            url,
-            "-H",
-            "Content-Type: application/json",
-            "-H",
-            "Authorization: Bearer " .. Api.OPENAI_API_KEY,
-            "-d",
-            "@" .. TMP_MSG_FILENAME,
-        },
-        on_exit = vim.schedule_wrap(function(response, exit_code)
-            print("RESPONSEE", response, exit_code)
-            vim.pretty_print(response)
-            Api.handle_response(response, exit_code, cb)
-        end),
-    }):start()
+    -- Api.job = job:new({
+    --     command = "curl",
+    --     args = {
+    --         url,
+    --         "-H",
+    --         "Content-Type: application/json",
+    --         "-H",
+    --         "Authorization: Bearer " .. Api.OPENAI_API_KEY,
+    --         "-d",
+    --         "@" .. TMP_MSG_FILENAME,
+    --     },
+    --     on_exit = vim.schedule_wrap(function(response, exit_code)
+    --         print("RESPONSEE", response, exit_code)
+    --         vim.pretty_print(response)
+    --         Api.handle_response(response, exit_code, cb)
+    --     end),
+    -- }):start()
 end
 
 Api.handle_response = vim.schedule_wrap(function(response, exit_code, cb)
