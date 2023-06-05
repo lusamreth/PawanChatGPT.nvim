@@ -67,6 +67,7 @@ function Api.make_call(url, params, cb)
 
     -- local response = curl_post(url, params)
     print("response", response)
+    vim.pretty_print(params)
     -- Api.handle_response(response, 0, cb)
     -- Api.job = job:new({
     --     command = "curl",
